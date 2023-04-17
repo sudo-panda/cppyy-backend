@@ -169,6 +169,9 @@ namespace Cppyy {
     RPY_EXPORTED
     TCppFuncAddr_t GetFunctionAddress(TCppMethod_t method, bool check_enabled=true);
 
+    RPY_EXPORTED
+    void AddTypeToLambda(TCppType_t type, const std::string &lambda_name);
+
 // // handling of function argument buffer --------------------------------------
     RPY_EXPORTED
     void*  AllocateFunctionArgs(size_t nargs);

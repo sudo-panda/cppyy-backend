@@ -230,6 +230,20 @@ public:
         InterOp::Declare(I, 
             "namespace __cppyy_internal { template<class C1, class C2>"
             " bool is_not_equal(const C1& c1, const C2& c2) { return (bool)(c1 != c2); } }");
+        InterOp::Declare(I,
+            "#ifndef CLING_INTERNAL_DECLARE_FT\n"
+            "#define CLING_INTERNAL_DECLARE_FT\n"
+            "#include <functional>\n"
+            "namespace __cling_internal {"
+            "  template <typename F>"
+            "  struct FT : public FT<decltype(&F::operator())> {};"
+            "  "
+            "  template <typename C, typename R, typename... Args>"
+            "  struct FT<R(C::*)(Args...) const> {"
+            "    typedef std::function<R(Args...)> F;"
+            "  };"
+            "}\n"
+            "#endif\n");
         InterOp::Process(I, 
             "namespace cling { namespace runtime {"
             " DynamicLibraryManager *gDLM = gCling->getDynamicLibraryManager(); } }");
@@ -858,6 +872,10 @@ Cppyy::TCppObject_t Cppyy::CallO(TCppMethod_t method,
 Cppyy::TCppFuncAddr_t Cppyy::GetFunctionAddress(TCppMethod_t method, bool check_enabled)
 {
     return (TCppFuncAddr_t) InterOp::GetFunctionAddress(getInterp(), method);
+}
+
+void Cppyy::AddTypeToLambda(TCppType_t type, const std::string &lambda_name) {
+    InterOp::AddTypeToLambda(type, lambda_name);
 }
 
 
