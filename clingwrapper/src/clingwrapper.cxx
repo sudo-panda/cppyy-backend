@@ -1287,8 +1287,10 @@ Cppyy::TCppType_t Cppyy::GetMethodReturnType(TCppMethod_t method)
 
 std::string Cppyy::GetMethodReturnTypeAsString(TCppMethod_t method)
 {
-    return InterOp::GetTypeAsString(
-        InterOp::GetFunctionReturnType(method));
+    return 
+    InterOp::GetTypeAsString(
+        InterOp::GetCanonicalType(
+            InterOp::GetFunctionReturnType(method)));
 }
 
 Cppyy::TCppIndex_t Cppyy::GetMethodNumArgs(TCppMethod_t method)
